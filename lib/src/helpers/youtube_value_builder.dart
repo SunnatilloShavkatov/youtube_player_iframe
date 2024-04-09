@@ -5,6 +5,7 @@
 // ignore_for_file: discarded_futures
 
 import "dart:async";
+import "dart:developer";
 
 import "package:flutter/material.dart";
 import "package:youtube_player_iframe/src/controller/youtube_player_controller.dart";
@@ -94,7 +95,7 @@ class _YoutubeValueBuilderState extends State<YoutubeValueBuilder> {
   Widget build(BuildContext context) => _child;
 
   void _subscribe() {
-    _subscription = _controller!.listen(
+    _subscription = _controller?.listen(
       (YoutubePlayerValue value) {
         if (widget.buildWhen?.call(_previousValue, value) ?? true) {
           if (!mounted) {
@@ -105,7 +106,9 @@ class _YoutubeValueBuilderState extends State<YoutubeValueBuilder> {
         }
         _previousValue = value;
       },
-      onError: () {},
+      onError: (v) {
+        log(v.toString());
+      },
     );
   }
 
