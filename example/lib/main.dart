@@ -2,10 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: discarded_futures
+
 import "dart:developer";
 
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:youtube_player_iframe/youtube_player_iframe.dart";
+
+import 'package:youtube_player_iframe_example/youtube_page.dart';
 
 Future<void> main() async {
   runApp(const YoutubeApp());
@@ -26,7 +31,11 @@ class YoutubeApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: const YoutubeAppDemo(),
+        home: YoutubePage(
+          message:
+              "https://www.youtube.com/watch?v=Txv87B-ZmJM&ab_channel=iTV-kino%2CseriallarvaTV",
+          top: MediaQuery.viewPaddingOf(context).top,
+        ),
       );
 }
 

@@ -16,7 +16,8 @@ import "package:youtube_player_iframe/src/widgets/fullscreen_youtube_player.dart
 ///
 /// See also:
 ///
-///  * [FullscreenYoutubePlayer], which play or stream Youtube Videos in fullscreen mode.
+///  * [FullscreenYoutubePlayer], which play or stream Youtube Videos in
+///  fullscreen mode.
 class YoutubePlayer extends StatefulWidget {
   /// A widget to play or stream Youtube Videos.
   const YoutubePlayer({
@@ -25,8 +26,6 @@ class YoutubePlayer extends StatefulWidget {
     this.aspectRatio = 16 / 9,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.backgroundColor,
-    @Deprecated("Unused parameter. Use `YoutubePlayerParam.userAgent` instead.")
-    this.userAgent,
     this.enableFullScreenOnVerticalDrag = true,
   });
 
@@ -38,9 +37,12 @@ class YoutubePlayer extends StatefulWidget {
 
   /// Which gestures should be consumed by the youtube player.
   ///
-  /// It is possible for other gesture recognizers to be competing with the player on pointer
-  /// events, e.g if the player is inside a [ListView] the [ListView] will want to handle
-  /// vertical drags. The player will claim gestures that are recognized by any of the
+  /// It is possible for other gesture recognizers to be competing with the
+  /// player on pointer
+  /// events, e.g if the player is inside a [ListView] the [ListView] will
+  /// want to handle
+  /// vertical drags. The player will claim gestures that are recognized by
+  /// any of the
   /// recognizers on this list.
   ///
   /// By default vertical and horizontal gestures are absorbed by the player.
@@ -52,13 +54,6 @@ class YoutubePlayer extends StatefulWidget {
   ///
   /// Default to [ColorScheme.background].
   final Color? backgroundColor;
-
-  /// The value used for the HTTP User-Agent: request header.
-  ///
-  /// When null the platform's webview default is used for the User-Agent header.
-  ///
-  /// By default `userAgent` is null.
-  final String? userAgent;
 
   /// Enables switching full screen mode on vertical drag in the player.
   ///
@@ -105,11 +100,11 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
 
     return OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) => AspectRatio(
-          aspectRatio: orientation == Orientation.landscape
-              ? MediaQuery.sizeOf(context).aspectRatio
-              : aspectRatio,
-          child: player,
-        ),
+        aspectRatio: orientation == Orientation.landscape
+            ? MediaQuery.sizeOf(context).aspectRatio
+            : aspectRatio,
+        child: player,
+      ),
     );
   }
 
@@ -124,7 +119,8 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   void _updateBackgroundColor(Color? backgroundColor) {
-    final Color bgColor = backgroundColor ?? Theme.of(context).colorScheme.background;
+    final Color bgColor =
+        backgroundColor ?? Theme.of(context).colorScheme.background;
     _controller.webViewController.setBackgroundColor(bgColor);
   }
 
@@ -135,7 +131,6 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
       },
     );
     await _controller.init();
-
     aspectRatio = _controller.isYoutubeShorts ? 9 / 16 : widget.aspectRatio;
     setState(() {});
   }
