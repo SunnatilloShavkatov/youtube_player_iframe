@@ -1,0 +1,7 @@
+/.idea/
+pubspec.lock
+/.idea
+/.dart_tool
+/.packages
+/build
+/android/.idea
