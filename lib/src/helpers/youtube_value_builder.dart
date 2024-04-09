@@ -2,17 +2,33 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-import 'dart:developer';
+// ignore_for_file: discarded_futures
 
-import 'package:flutter/material.dart';
+import "dart:async";
 
-import '../controller/youtube_player_controller.dart';
-import '../player_value.dart';
-import 'youtube_value_provider.dart';
+import "package:flutter/material.dart";
+import "package:youtube_player_iframe/src/controller/youtube_player_controller.dart";
+import "package:youtube_player_iframe/src/helpers/youtube_value_provider.dart";
+import "package:youtube_player_iframe/src/player_value.dart";
 
-/// Widget that builds itself based on the latest snapshot of interaction with a [YoutubePlayerController].
+/// Widget that builds itself based on the latest snapshot of interaction with
+/// a [YoutubePlayerController].
 class YoutubeValueBuilder extends StatefulWidget {
+  /// Creates a new [YoutubeValueBuilder] that builds itself based on the latest
+  /// snapshot of interaction with the specified [controller] and whose build
+  /// strategy is given by [builder].
+  ///
+  /// The [controller] property can be omitted if
+  /// [YoutubePlayerControllerProvider] is above this widget in widget tree.
+  ///
+  /// The [builder] must not be null.
+  const YoutubeValueBuilder({
+    super.key,
+    required this.builder,
+    this.buildWhen,
+    this.controller,
+  });
+
   /// The [YoutubePlayerController].
   final YoutubePlayerController? controller;
 
@@ -27,20 +43,6 @@ class YoutubeValueBuilder extends StatefulWidget {
   /// [buildWhen] is optional and if omitted, it will default to `true`.
   final bool Function(YoutubePlayerValue, YoutubePlayerValue)? buildWhen;
 
-  /// Creates a new [YoutubeValueBuilder] that builds itself based on the latest
-  /// snapshot of interaction with the specified [controller] and whose build
-  /// strategy is given by [builder].
-  ///
-  /// The [controller] property can be omitted if [YoutubePlayerControllerProvider] is above this widget in widget tree.
-  ///
-  /// The [builder] must not be null.
-  const YoutubeValueBuilder({
-    super.key,
-    required this.builder,
-    this.buildWhen,
-    this.controller,
-  });
-
   @override
   State<YoutubeValueBuilder> createState() => _YoutubeValueBuilderState();
 }
@@ -54,8 +56,10 @@ class _YoutubeValueBuilderState extends State<YoutubeValueBuilder> {
   @override
   void didUpdateWidget(YoutubeValueBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldController = oldWidget.controller ?? context.ytController;
-    final currentController = widget.controller ?? oldController;
+    final YoutubePlayerController oldController =
+        oldWidget.controller ?? context.ytController;
+    final YoutubePlayerController currentController =
+        widget.controller ?? oldController;
     if (oldController != currentController) {
       if (_subscription != null) {
         _unsubscribe();
@@ -69,7 +73,8 @@ class _YoutubeValueBuilderState extends State<YoutubeValueBuilder> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final controller = widget.controller ?? context.ytController;
+    final YoutubePlayerController controller =
+        widget.controller ?? context.ytController;
     if (_controller == null) {
       _controller = controller;
       _previousValue = _controller!.value;
@@ -90,15 +95,17 @@ class _YoutubeValueBuilderState extends State<YoutubeValueBuilder> {
 
   void _subscribe() {
     _subscription = _controller!.listen(
-      (value) {
+      (YoutubePlayerValue value) {
         if (widget.buildWhen?.call(_previousValue, value) ?? true) {
-          if (!mounted) return;
+          if (!mounted) {
+            return;
+          }
           _child = widget.builder(context, value);
           setState(() {});
         }
         _previousValue = value;
       },
-      onError: (e) => log(e.toString()),
+      onError: () {},
     );
   }
 

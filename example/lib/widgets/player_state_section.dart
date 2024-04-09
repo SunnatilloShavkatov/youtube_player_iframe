@@ -2,23 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:flutter/material.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 ///
 class PlayerStateSection extends StatelessWidget {
+  const PlayerStateSection({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return YoutubeValueBuilder(
-      builder: (context, value) {
-        return AnimatedContainer(
+  Widget build(BuildContext context) => YoutubeValueBuilder(
+      builder: (BuildContext context, YoutubePlayerValue value) => AnimatedContainer(
           duration: const Duration(milliseconds: 800),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(20),
             color: _getStateColor(value.playerState),
           ),
           width: double.infinity,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Text(
             value.playerState.toString(),
             style: const TextStyle(
@@ -27,10 +27,8 @@ class PlayerStateSection extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-        );
-      },
+        ),
     );
-  }
 
   Color _getStateColor(PlayerState state) {
     switch (state) {

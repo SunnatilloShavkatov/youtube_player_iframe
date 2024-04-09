@@ -1,24 +1,24 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
+import "dart:async";
+import "dart:convert";
+import "dart:developer";
 
-import 'package:flutter/foundation.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:flutter/foundation.dart";
+import "package:webview_flutter/webview_flutter.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 /// Handles all the player events received from the player iframe.
 class YoutubePlayerEventHandler {
   /// Creates [YoutubePlayerEventHandler] with the provided [controller].
   YoutubePlayerEventHandler(this.controller) {
-    _events = {
-      'Ready': onReady,
-      'StateChange': onStateChange,
-      'PlaybackQualityChange': onPlaybackQualityChange,
-      'PlaybackRateChange': onPlaybackRateChange,
-      'PlayerError': onError,
-      'FullscreenButtonPressed': onFullscreenButtonPressed,
-      'VideoState': onVideoState,
-      'AutoplayBlocked': onAutoplayBlocked,
+    _events = <String, ValueChanged<Object>>{
+      "Ready": onReady,
+      "StateChange": onStateChange,
+      "PlaybackQualityChange": onPlaybackQualityChange,
+      "PlaybackRateChange": onPlaybackRateChange,
+      "PlayerError": onError,
+      "FullscreenButtonPressed": onFullscreenButtonPressed,
+      "VideoState": onVideoState,
+      "AutoplayBlocked": onAutoplayBlocked,
     };
   }
 
@@ -34,10 +34,10 @@ class YoutubePlayerEventHandler {
 
   /// Handles the [javaScriptMessage] from the player iframe and create events.
   void call(JavaScriptMessage javaScriptMessage) {
-    final data = Map.from(jsonDecode(javaScriptMessage.message));
+    final Map data = Map.from(jsonDecode(javaScriptMessage.message));
 
-    for (final entry in data.entries) {
-      if (entry.key == 'ApiChange') {
+    for (final MapEntry entry in data.entries) {
+      if (entry.key == "ApiChange") {
         onApiChange(entry.value);
       } else {
         _events[entry.key]?.call(entry.value ?? Object());
@@ -49,27 +49,29 @@ class YoutubePlayerEventHandler {
   /// Your application should implement this function if you want to automatically execute certain operations,
   /// such as playing the video or displaying information about the video, as soon as the player is ready.
   void onReady(Object data) {
-    if (!_readyCompleter.isCompleted) _readyCompleter.complete();
+    if (!_readyCompleter.isCompleted) {
+      _readyCompleter.complete();
+    }
   }
 
   /// This event fires whenever the player's state changes.
   /// The data property of the event object that the API passes to your event listener function
   /// will specify an integer that corresponds to the new player state.
   Future<void> onStateChange(Object data) async {
-    final stateCode = data as int;
+    final int stateCode = data as int;
 
-    final playerState = PlayerState.values.firstWhere(
-      (state) => state.code == stateCode,
+    final PlayerState playerState = PlayerState.values.firstWhere(
+      (PlayerState state) => state.code == stateCode,
       orElse: () => PlayerState.unknown,
     );
 
     if (playerState == PlayerState.playing) {
       controller.update(playerState: playerState, error: YoutubeError.none);
 
-      final duration = await controller.duration;
-      final videoData = await controller.videoData;
+      final double duration = await controller.duration;
+      final VideoData videoData = await controller.videoData;
 
-      final metaData = YoutubeMetaData(
+      final YoutubeMetaData metaData = YoutubeMetaData(
         duration: Duration(milliseconds: (duration * 1000).truncate()),
         videoId: videoData.videoId,
         author: videoData.author,
@@ -117,8 +119,8 @@ class YoutubePlayerEventHandler {
   /// The API will pass an event object to the event listener function.
   /// That [data] property will specify an integer that identifies the type of error that occurred.
   void onError(Object data) {
-    final error = YoutubeError.values.firstWhere(
-      (error) => error.code == data,
+    final YoutubeError error = YoutubeError.values.firstWhere(
+      (YoutubeError error) => error.code == data,
       orElse: () => YoutubeError.unknown,
     );
 
@@ -133,9 +135,9 @@ class YoutubePlayerEventHandler {
   /// This event fires when the auto playback is blocked by the browser.
   void onAutoplayBlocked(Object data) {
     log(
-      'Autoplay was blocked by browser. '
-      'Most modern browser does not allow video with sound to autoplay. '
-      'Try muting the video to autoplay.',
+      "Autoplay was blocked by browser. "
+      "Most modern browser does not allow video with sound to autoplay. "
+      "Try muting the video to autoplay.",
     );
   }
 

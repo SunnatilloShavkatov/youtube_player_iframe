@@ -2,55 +2,52 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:flutter/material.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 ///
 class MetaDataSection extends StatelessWidget {
+  const MetaDataSection({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return YoutubeValueBuilder(
-      buildWhen: (o, n) {
-        return o.metaData != n.metaData ||
-            o.playbackQuality != n.playbackQuality;
-      },
-      builder: (context, value) {
-        return Column(
+  Widget build(BuildContext context) => YoutubeValueBuilder(
+      buildWhen: (YoutubePlayerValue o, YoutubePlayerValue n) => o.metaData != n.metaData ||
+            o.playbackQuality != n.playbackQuality,
+      builder: (BuildContext context, YoutubePlayerValue value) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _Text('Title', value.metaData.title),
+          children: <Widget>[
+            _Text("Title", value.metaData.title),
             const SizedBox(height: 10),
-            _Text('Channel', value.metaData.author),
+            _Text("Channel", value.metaData.author),
             const SizedBox(height: 10),
             _Text(
-              'Playback Quality',
-              value.playbackQuality ?? '',
+              "Playback Quality",
+              value.playbackQuality ?? "",
             ),
             const SizedBox(height: 10),
             Row(
-              children: [
-                _Text('Video Id', value.metaData.videoId),
+              children: <Widget>[
+                _Text("Video Id", value.metaData.videoId),
                 const Spacer(),
                 const _Text(
-                  'Speed',
-                  '',
+                  "Speed",
+                  "",
                 ),
                 YoutubeValueBuilder(
-                  builder: (context, value) {
-                    return DropdownButton(
+                  builder: (BuildContext context, YoutubePlayerValue value) => DropdownButton(
                       value: value.playbackRate,
                       isDense: true,
                       underline: const SizedBox(),
                       items: PlaybackRate.all
                           .map(
-                            (rate) => DropdownMenuItem(
+                            (double rate) => DropdownMenuItem(
+                              value: rate,
                               child: Text(
-                                '${rate}x',
+                                "${rate}x",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              value: rate,
                             ),
                           )
                           .toList(),
@@ -59,31 +56,27 @@ class MetaDataSection extends StatelessWidget {
                           context.ytController.setPlaybackRate(newValue);
                         }
                       },
-                    );
-                  },
+                    ),
                 ),
               ],
             ),
           ],
-        );
-      },
+        ),
     );
-  }
 }
 
 class _Text extends StatelessWidget {
+
+  const _Text(this.title, this.value);
   final String title;
   final String value;
 
-  const _Text(this.title, this.value);
-
   @override
-  Widget build(BuildContext context) {
-    return Text.rich(
+  Widget build(BuildContext context) => Text.rich(
       TextSpan(
-        text: '$title : ',
+        text: "$title : ",
         style: Theme.of(context).textTheme.labelLarge,
-        children: [
+        children: <InlineSpan>[
           TextSpan(
             text: value,
             style: Theme.of(context)
@@ -94,5 +87,4 @@ class _Text extends StatelessWidget {
         ],
       ),
     );
-  }
 }

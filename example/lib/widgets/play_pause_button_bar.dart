@@ -2,24 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:flutter/material.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 ///
 class PlayPauseButtonBar extends StatelessWidget {
+  PlayPauseButtonBar({super.key});
+
   final ValueNotifier<bool> _isMuted = ValueNotifier(false);
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+      children: <Widget>[
         IconButton(
           icon: const Icon(Icons.skip_previous),
           onPressed: context.ytController.previousVideo,
         ),
         YoutubeValueBuilder(
-          builder: (context, value) {
-            return IconButton(
+          builder: (BuildContext context, YoutubePlayerValue value) => IconButton(
               icon: Icon(
                 value.playerState == PlayerState.playing
                     ? Icons.pause
@@ -30,13 +30,11 @@ class PlayPauseButtonBar extends StatelessWidget {
                     ? context.ytController.pauseVideo()
                     : context.ytController.playVideo();
               },
-            );
-          },
+            ),
         ),
         ValueListenableBuilder<bool>(
           valueListenable: _isMuted,
-          builder: (context, isMuted, _) {
-            return IconButton(
+          builder: (BuildContext context, bool isMuted, _) => IconButton(
               icon: Icon(isMuted ? Icons.volume_off : Icons.volume_up),
               onPressed: () {
                 _isMuted.value = !isMuted;
@@ -44,8 +42,7 @@ class PlayPauseButtonBar extends StatelessWidget {
                     ? context.ytController.unMute()
                     : context.ytController.mute();
               },
-            );
-          },
+            ),
         ),
         IconButton(
           icon: const Icon(Icons.skip_next),
@@ -53,5 +50,4 @@ class PlayPauseButtonBar extends StatelessWidget {
         ),
       ],
     );
-  }
 }

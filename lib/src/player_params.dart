@@ -2,13 +2,33 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/foundation.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:flutter/foundation.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 /// Defines player parameters for [YoutubePlayer].
 class YoutubePlayerParams {
+  /// Defines player parameters for the youtube player.
+  const YoutubePlayerParams({
+    this.mute = false,
+    this.captionLanguage = "en",
+    this.enableCaption = true,
+    this.pointerEvents = PointerEvents.initial,
+    this.color = "white",
+    this.showControls = true,
+    this.enableKeyboard = kIsWeb,
+    this.enableJavaScript = true,
+    this.showFullscreenButton = false,
+    this.interfaceLanguage = "en",
+    this.showVideoAnnotations = true,
+    this.loop = false,
+    this.origin = "https://www.youtube.com",
+    this.playsInline = true,
+    this.strictRelatedVideos = false,
+    this.userAgent,
+  });
+
   /// Mutes the player.
   ///
   /// Default is false.
@@ -110,53 +130,31 @@ class YoutubePlayerParams {
   /// The user agent for the player.
   final String? userAgent;
 
-  /// Defines player parameters for the youtube player.
-  const YoutubePlayerParams({
-    this.mute = false,
-    this.captionLanguage = 'en',
-    this.enableCaption = true,
-    this.pointerEvents = PointerEvents.initial,
-    this.color = 'white',
-    this.showControls = true,
-    this.enableKeyboard = kIsWeb,
-    this.enableJavaScript = true,
-    this.showFullscreenButton = false,
-    this.interfaceLanguage = 'en',
-    this.showVideoAnnotations = true,
-    this.loop = false,
-    this.origin = 'https://www.youtube.com',
-    this.playsInline = true,
-    this.strictRelatedVideos = false,
-    this.userAgent,
-  });
-
   /// Creates [Map] representation of [YoutubePlayerParams].
-  Map<String, dynamic> toMap() {
-    return {
-      'autoplay': 1,
-      'mute': _boolean(mute),
-      'cc_lang_pref': captionLanguage,
-      'cc_load_policy': _boolean(enableCaption),
-      'color': color,
-      'controls': _boolean(showControls),
-      'disablekb': _boolean(!enableKeyboard),
-      'enablejsapi': _boolean(enableJavaScript),
-      'fs': _boolean(showFullscreenButton),
-      'hl': interfaceLanguage,
-      'iv_load_policy': showVideoAnnotations ? 1 : 3,
-      'loop': _boolean(loop),
-      'modestbranding': '1',
-      if (kIsWeb) ...{
-        'origin': Uri.base.origin,
-        'widget_referrer': Uri.base.origin,
-      } else if (origin != null) ...{
-        'origin': origin,
-        'widget_referrer': origin,
-      },
-      'playsinline': _boolean(playsInline),
-      'rel': _boolean(!strictRelatedVideos),
-    };
-  }
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        "autoplay": 1,
+        "mute": _boolean(mute),
+        "cc_lang_pref": captionLanguage,
+        "cc_load_policy": _boolean(enableCaption),
+        "color": color,
+        "controls": _boolean(showControls),
+        "disablekb": _boolean(!enableKeyboard),
+        "enablejsapi": _boolean(enableJavaScript),
+        "fs": _boolean(showFullscreenButton),
+        "hl": interfaceLanguage,
+        "iv_load_policy": showVideoAnnotations ? 1 : 3,
+        "loop": _boolean(loop),
+        "modestbranding": "1",
+        if (kIsWeb) ...<String, dynamic>{
+          "origin": Uri.base.origin,
+          "widget_referrer": Uri.base.origin,
+        } else if (origin != null) ...<String, dynamic>{
+          "origin": origin,
+          "widget_referrer": origin,
+        },
+        "playsinline": _boolean(playsInline),
+        "rel": _boolean(!strictRelatedVideos),
+      };
 
   /// The serialized JSON representation of the [YoutubePlayerParams].
   String toJson() => jsonEncode(toMap());
@@ -167,15 +165,15 @@ class YoutubePlayerParams {
 /// The pointer events.
 enum PointerEvents {
   /// The player reacts to pointer events, like hover and click.
-  auto('auto'),
+  auto("auto"),
 
   /// The initial configuration for pointer event.
   ///
   /// In most cases, this resolves to [PointerEvents.auto].
-  initial('initial'),
+  initial("initial"),
 
   /// The player does not react to any pointer events.
-  none('none');
+  none("none");
 
   /// Creates a [PointerEvents] for the [name].
   const PointerEvents(this.name);

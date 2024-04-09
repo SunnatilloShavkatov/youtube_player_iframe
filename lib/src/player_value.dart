@@ -1,10 +1,8 @@
 // Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import 'enums/playback_rate.dart';
-import 'enums/player_state.dart';
-import 'enums/youtube_error.dart';
-import 'meta_data.dart';
+import "package:flutter/foundation.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 /// Youtube Player value
 class YoutubePlayerValue {
@@ -43,18 +41,17 @@ class YoutubePlayerValue {
   final YoutubeMetaData metaData;
 
   @override
-  String toString() {
-    return '$runtimeType('
-        'metaData: ${metaData.toString()}, '
-        'playerState: $playerState, '
-        'playbackRate: $playbackRate, '
-        'playbackQuality: $playbackQuality, '
-        'isFullScreen: ${fullScreenOption.enabled}, '
-        'error: $error)';
-  }
+  String toString() => "$runtimeType("
+      "metaData: $metaData, "
+      "playerState: $playerState, "
+      "playbackRate: $playbackRate, "
+      "playbackQuality: $playbackQuality, "
+      "isFullScreen: ${fullScreenOption.enabled}, "
+      "error: $error)";
 }
 
 /// The fullscreen option.
+@immutable
 class FullScreenOption {
   /// Creates [FullScreenOption].
   const FullScreenOption({
@@ -69,13 +66,12 @@ class FullScreenOption {
   final bool locked;
 
   @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is FullScreenOption &&
-            runtimeType == other.runtimeType &&
-            enabled == other.enabled &&
-            locked == other.locked;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FullScreenOption &&
+          runtimeType == other.runtimeType &&
+          enabled == other.enabled &&
+          locked == other.locked;
 
   @override
   int get hashCode => enabled.hashCode ^ locked.hashCode;

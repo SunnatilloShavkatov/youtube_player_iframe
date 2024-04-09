@@ -2,18 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// ignore_for_file: discarded_futures
 
-import '../controller/youtube_player_controller.dart';
-import '../helpers/youtube_value_builder.dart';
-import '../helpers/youtube_value_provider.dart';
-import '../player_value.dart';
-import 'youtube_player.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 
-/// A widget the scaffolds the [YoutubePlayer] so that it can be moved around easily in the view
+import "package:youtube_player_iframe/src/controller/youtube_player_controller.dart";
+import "package:youtube_player_iframe/src/helpers/youtube_value_builder.dart";
+import "package:youtube_player_iframe/src/helpers/youtube_value_provider.dart";
+import "package:youtube_player_iframe/src/player_value.dart";
+import "package:youtube_player_iframe/src/widgets/youtube_player.dart";
+
+/// A widget the scaffolds the [YoutubePlayer] so that it can be moved around
+/// easily in the view
 /// and handles the fullscreen functionality.
 class YoutubePlayerScaffold extends StatefulWidget {
   /// Creates [YoutubePlayerScaffold].
@@ -25,18 +28,16 @@ class YoutubePlayerScaffold extends StatefulWidget {
     this.autoFullScreen = true,
     this.defaultOrientations = DeviceOrientation.values,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.fullscreenOrientations = const [
+    this.fullscreenOrientations = const <DeviceOrientation>[
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ],
-    this.lockedOrientations = const [
+    this.lockedOrientations = const <DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ],
     this.enableFullScreenOnVerticalDrag = true,
     this.backgroundColor,
-    @Deprecated('Unused parameter. Use `YoutubePlayerParam.userAgent` instead.')
-    this.userAgent,
   });
 
   /// Builds the child widget.
@@ -59,7 +60,8 @@ class YoutubePlayerScaffold extends StatefulWidget {
   /// The orientations that are used when in fullscreen.
   final List<DeviceOrientation> fullscreenOrientations;
 
-  /// The orientations that are used when not in fullscreen and auto rotate is disabled.
+  /// The orientations that are used when not in fullscreen and auto rotate
+  /// is disabled.
   final List<DeviceOrientation> lockedOrientations;
 
   /// Enables switching full screen mode on vertical drag in the player.
@@ -72,15 +74,7 @@ class YoutubePlayerScaffold extends StatefulWidget {
   /// This property is ignored in web.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  /// The background color of the [WebView].
   final Color? backgroundColor;
-
-  /// The value used for the HTTP User-Agent: request header.
-  ///
-  /// When null the platform's webview default is used for the User-Agent header.
-  ///
-  /// By default `userAgent` is null.
-  final String? userAgent;
 
   @override
   State<YoutubePlayerScaffold> createState() => _YoutubePlayerScaffoldState();
@@ -98,7 +92,7 @@ class _YoutubePlayerScaffoldState extends State<YoutubePlayerScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final player = KeyedSubtree(
+    final KeyedSubtree player = KeyedSubtree(
       key: _playerKey,
       child: YoutubePlayer(
         controller: widget.controller,
@@ -115,23 +109,25 @@ class _YoutubePlayerScaffoldState extends State<YoutubePlayerScaffold> {
           ? widget.builder(context, player)
           : YoutubeValueBuilder(
               controller: widget.controller,
-              buildWhen: (o, n) => o.fullScreenOption != n.fullScreenOption,
-              builder: (context, value) {
-                return _FullScreen(
-                  auto: widget.autoFullScreen,
-                  defaultOrientations: widget.defaultOrientations,
-                  fullscreenOrientations: widget.fullscreenOrientations,
-                  lockedOrientations: widget.lockedOrientations,
-                  fullScreenOption: value.fullScreenOption,
-                  child: Builder(
-                    builder: (context) {
-                      if (value.fullScreenOption.enabled) return player;
+              buildWhen: (YoutubePlayerValue o, YoutubePlayerValue n) =>
+                  o.fullScreenOption != n.fullScreenOption,
+              builder: (BuildContext context, YoutubePlayerValue value) =>
+                  _FullScreen(
+                auto: widget.autoFullScreen,
+                defaultOrientations: widget.defaultOrientations,
+                fullscreenOrientations: widget.fullscreenOrientations,
+                lockedOrientations: widget.lockedOrientations,
+                fullScreenOption: value.fullScreenOption,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if (value.fullScreenOption.enabled) {
+                      return player;
+                    }
 
-                      return widget.builder(context, player);
-                    },
-                  ),
-                );
-              },
+                    return widget.builder(context, player);
+                  },
+                ),
+              ),
             ),
     );
   }
@@ -165,7 +161,9 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
-    if (widget.auto) WidgetsBinding.instance.addObserver(this);
+    if (widget.auto) {
+      WidgetsBinding.instance.addObserver(this);
+    }
     SystemChrome.setPreferredOrientations(_deviceOrientations);
     SystemChrome.setEnabledSystemUIMode(_uiMode);
   }
@@ -184,11 +182,14 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
   void didChangeMetrics() {
     super.didChangeMetrics();
 
-    final orientation = MediaQuery.of(context).orientation;
-    final controller = YoutubePlayerControllerProvider.of(context);
-    final isFullScreen = controller.value.fullScreenOption.enabled;
+    final Orientation orientation = MediaQuery.of(context).orientation;
+    final YoutubePlayerController controller =
+        YoutubePlayerControllerProvider.of(context);
+    final bool isFullScreen = controller.value.fullScreenOption.enabled;
 
-    if (_previousOrientation == orientation) return;
+    if (_previousOrientation == orientation) {
+      return;
+    }
 
     if (!isFullScreen && orientation == Orientation.landscape) {
       controller.enterFullScreen(lock: false);
@@ -199,22 +200,21 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvoked: _handleFullScreenBackAction,
-      child: widget.child,
-    );
-  }
+  Widget build(BuildContext context) => PopScope(
+        onPopInvoked: _handleFullScreenBackAction,
+        child: widget.child,
+      );
 
   @override
   void dispose() {
-    if (widget.auto) WidgetsBinding.instance.removeObserver(this);
+    if (widget.auto) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
     super.dispose();
   }
 
   List<DeviceOrientation> get _deviceOrientations {
-    final fullscreen = widget.fullScreenOption;
+    final FullScreenOption fullscreen = widget.fullScreenOption;
 
     if (!fullscreen.enabled && fullscreen.locked) {
       return widget.lockedOrientations;
@@ -225,14 +225,14 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
     return widget.defaultOrientations;
   }
 
-  SystemUiMode get _uiMode {
-    return widget.fullScreenOption.enabled
-        ? SystemUiMode.immersive
-        : SystemUiMode.edgeToEdge;
-  }
+  SystemUiMode get _uiMode => widget.fullScreenOption.enabled
+      ? SystemUiMode.immersive
+      : SystemUiMode.edgeToEdge;
 
   void _handleFullScreenBackAction(bool didPop) {
-    if (didPop) return;
+    if (didPop) {
+      return;
+    }
 
     if (mounted && widget.fullScreenOption.enabled) {
       YoutubePlayerControllerProvider.of(context).exitFullScreen();

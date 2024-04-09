@@ -4,6 +4,14 @@
 
 /// Meta data for Youtube Video.
 class YoutubeMetaData {
+  /// Creates [YoutubeMetaData] for Youtube Video.
+  const YoutubeMetaData({
+    this.videoId = "",
+    this.title = "",
+    this.author = "",
+    this.duration = Duration.zero,
+  });
+
   /// Youtube video ID of the currently loaded video.
   final String videoId;
 
@@ -16,20 +24,10 @@ class YoutubeMetaData {
   /// Total duration of the currently loaded video.
   final Duration duration;
 
-  /// Creates [YoutubeMetaData] for Youtube Video.
-  const YoutubeMetaData({
-    this.videoId = '',
-    this.title = '',
-    this.author = '',
-    this.duration = const Duration(),
-  });
-
   @override
-  String toString() {
-    return 'YoutubeMetaData('
-        'videoId: $videoId, '
-        'title: $title, '
-        'author: $author, '
-        'duration: ${duration.inSeconds} sec.)';
-  }
+  String toString() => "YoutubeMetaData("
+      "videoId: $videoId, "
+      "title: $title, "
+      "author: $author, "
+      "duration: ${duration.inSeconds} sec.)";
 }

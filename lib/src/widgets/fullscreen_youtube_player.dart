@@ -1,11 +1,13 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// ignore_for_file: discarded_futures
 
-import '../controller/youtube_player_controller.dart';
-import '../player_params.dart';
-import 'youtube_player.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+
+import "package:youtube_player_iframe/src/controller/youtube_player_controller.dart";
+import "package:youtube_player_iframe/src/player_params.dart";
+import "package:youtube_player_iframe/src/widgets/youtube_player.dart";
 
 /// A widget that plays Youtube Video is full screen mode.
 ///
@@ -45,15 +47,13 @@ class FullscreenYoutubePlayer extends StatefulWidget {
   /// This is ignored on web.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  /// The background color of the [WebView].
   ///
   /// Default to [ColorScheme.background].
   final Color? backgroundColor;
 
   @override
-  State<FullscreenYoutubePlayer> createState() {
-    return _FullscreenYoutubePlayerState();
-  }
+  State<FullscreenYoutubePlayer> createState() =>
+      _FullscreenYoutubePlayerState();
 
   /// Launches the [FullscreenYoutubePlayer].
   ///
@@ -66,22 +66,19 @@ class FullscreenYoutubePlayer extends StatefulWidget {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers =
         const <Factory<OneSequenceGestureRecognizer>>{},
     Color? backgroundColor,
-  }) {
-    return Navigator.push<double>(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return FullscreenYoutubePlayer(
+  }) =>
+      Navigator.push<double>(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => FullscreenYoutubePlayer(
             videoId: videoId,
             startSeconds: startSeconds,
             endSeconds: endSeconds,
             gestureRecognizers: gestureRecognizers,
             backgroundColor: backgroundColor,
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      );
 }
 
 class _FullscreenYoutubePlayerState extends State<FullscreenYoutubePlayer> {
@@ -97,14 +94,16 @@ class _FullscreenYoutubePlayerState extends State<FullscreenYoutubePlayer> {
       autoPlay: true,
       params: const YoutubePlayerParams(showFullscreenButton: true),
     )..setFullScreenListener((_) async {
-        final currentTime = await _controller.currentTime;
-        if (!mounted) return;
+        final double currentTime = await _controller.currentTime;
+        if (!mounted) {
+          return;
+        }
 
         Navigator.pop(context, currentTime);
       });
 
     SystemChrome.setPreferredOrientations(
-      [
+      <DeviceOrientation>[
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ],
@@ -113,23 +112,23 @@ class _FullscreenYoutubePlayerState extends State<FullscreenYoutubePlayer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (didPop) return;
-        _controller.currentTime.then(
-          (time) => Navigator.pop(context, time),
-        );
-      },
-      child: YoutubePlayer(
-        controller: _controller,
-        aspectRatio: MediaQuery.of(context).size.aspectRatio,
-        backgroundColor: widget.backgroundColor,
-        gestureRecognizers: widget.gestureRecognizers,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) {
+          if (didPop) {
+            return;
+          }
+          _controller.currentTime.then(
+            (double time) => Navigator.pop(context, time),
+          );
+        },
+        child: YoutubePlayer(
+          controller: _controller,
+          aspectRatio: MediaQuery.of(context).size.aspectRatio,
+          backgroundColor: widget.backgroundColor,
+          gestureRecognizers: widget.gestureRecognizers,
+        ),
+      );
 
   @override
   void dispose() {
@@ -139,7 +138,8 @@ class _FullscreenYoutubePlayerState extends State<FullscreenYoutubePlayer> {
   }
 
   void _resetOrientation() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations(
+        <DeviceOrientation>[DeviceOrientation.portraitUp],);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

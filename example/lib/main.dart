@@ -2,61 +2,40 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'package:youtube_player_iframe_example/video_list_page.dart';
-
-import 'widgets/meta_data_section.dart';
-import 'widgets/play_pause_button_bar.dart';
-import 'widgets/player_state_section.dart';
-import 'widgets/source_input_section.dart';
-
-const List<String> _videoIds = [
-  'tcodrIK2P_I',
-  'H5v3kku4y6Q',
-  'nPt8bK2gbaU',
-  'K18cpp_-gP8',
-  'iLnmTe5Q2Qw',
-  '_WoCV4c6XOE',
-  'KmzdUe0RSJo',
-  '6jZDSSZZxjQ',
-  'p2lYr3vM_1w',
-  '7QUtEmBT_-w',
-  '34_PXCzGw1M'
-];
+import "package:flutter/material.dart";
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 Future<void> main() async {
-  runApp(YoutubeApp());
+  runApp(const YoutubeApp());
 }
 
 ///
 class YoutubeApp extends StatelessWidget {
+  const YoutubeApp({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Youtube Player IFrame Demo',
-      theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
+  Widget build(BuildContext context) => MaterialApp(
+        title: "Youtube Player IFrame Demo",
+        theme: ThemeData.from(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+            brightness: Brightness.dark,
+          ),
+          useMaterial3: true,
         ),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: YoutubeAppDemo(),
-    );
-  }
+        debugShowCheckedModeBanner: false,
+        home: const YoutubeAppDemo(),
+      );
 }
 
 ///
 class YoutubeAppDemo extends StatefulWidget {
+  const YoutubeAppDemo({super.key});
+
   @override
-  _YoutubeAppDemoState createState() => _YoutubeAppDemoState();
+  State<YoutubeAppDemo> createState() => _YoutubeAppDemoState();
 }
 
 class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
@@ -70,49 +49,59 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
         showControls: false,
         showFullscreenButton: true,
         showVideoAnnotations: false,
+        loop: true,
       ),
     );
 
-    _controller.setFullScreenListener(
-      (isFullScreen) {
-        log('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
-      },
-    );
-
-    _controller.loadVideoById(
-      videoId: "2GnkIsGVDfI",
-    );
+    _controller
+      ..setFullScreenListener(
+        (bool isFullScreen) {
+          log('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
+        },
+      )
+      ..loadVideo(
+        "https://youtube.com/shorts/2GnkIsGVDfI?si=WlAnwymyr-L6_nDa",
+      );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return YoutubePlayerScaffold(
-      controller: _controller,
-      builder: (context, player) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Youtube Player IFrame Demo'),
-          ),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                Align(child: player),
-                Positioned(
-                  bottom: 1,
-                  left: 0,
-                  right: 0,
-                  child: const VideoPositionIndicator(),
-                ),
-                Positioned.fill(
-                  child: const Controls(),
-                ),
-              ],
+  Widget build(BuildContext context) => YoutubePlayerScaffold(
+        controller: _controller,
+        builder: (BuildContext context, Widget player) => YoutubeValueBuilder(
+          builder: (_, YoutubePlayerValue value) => Scaffold(
+            body: SafeArea(
+              child: Stack(
+                children: <Widget>[
+                  Align(child: player),
+                  AnimatedPositioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    duration: const Duration(milliseconds: 300),
+                    child: AppBar(
+                      backgroundColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      title: const Text("Youtube Player IFrame"),
+                    ),
+                  ),
+                  // Positioned(
+                  //   bottom: 1,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: const VideoPositionIndicator(),
+                  // ),
+                  const Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Controls(),
+                  ),
+                ],
+              ),
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 
   @override
   void dispose() {
@@ -124,51 +113,37 @@ class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
 ///
 class Controls extends StatelessWidget {
   ///
-  const Controls();
+  const Controls({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // MetaDataSection(),
-          // _space,
-          // // SourceInputSection(),
-          // _space,
-          // _space,
-          const Spacer(),
-
-          const VideoPositionSeeker(),
-        ],
-      ),
-    );
-  }
-
-  Widget get _space => const SizedBox(height: 10);
+  Widget build(BuildContext context) => const VideoPositionSeeker();
 }
 
 ///
-class VideoPlaylistIconButton extends StatelessWidget {
+class VideoPlaylistIconButton extends StatefulWidget {
   ///
   const VideoPlaylistIconButton({super.key});
 
   @override
+  State<VideoPlaylistIconButton> createState() =>
+      _VideoPlaylistIconButtonState();
+}
+
+class _VideoPlaylistIconButtonState extends State<VideoPlaylistIconButton> {
+  @override
   Widget build(BuildContext context) {
-    final controller = context.ytController;
+    final YoutubePlayerController controller = context.ytController;
 
     return IconButton(
       onPressed: () async {
-        controller.pauseVideo();
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const VideoListPage(),
-          ),
-        );
-        controller.playVideo();
+        // controller.pauseVideo();
+        // await Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => const VideoListPage(),
+        //   ),
+        // );
+        // controller.playVideo();
       },
       icon: const Icon(Icons.playlist_play_sharp),
     );
@@ -177,19 +152,19 @@ class VideoPlaylistIconButton extends StatelessWidget {
 
 ///
 class VideoPositionIndicator extends StatelessWidget {
-  ///
   const VideoPositionIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.ytController;
+    final YoutubePlayerController controller = context.ytController;
 
     return StreamBuilder<YoutubeVideoState>(
       stream: controller.videoStateStream,
       initialData: const YoutubeVideoState(),
-      builder: (context, snapshot) {
-        final position = snapshot.data?.position.inMilliseconds ?? 0;
-        final duration = controller.metadata.duration.inMilliseconds;
+      builder:
+          (BuildContext context, AsyncSnapshot<YoutubeVideoState> snapshot) {
+        final int position = snapshot.data?.position.inMilliseconds ?? 0;
+        final int duration = controller.metadata.duration.inMilliseconds;
 
         return LinearProgressIndicator(
           value: duration == 0 ? 0 : position / duration,
@@ -207,43 +182,40 @@ class VideoPositionSeeker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var value = 0.0;
+    double value = 0;
 
     return StreamBuilder<YoutubeVideoState>(
       stream: context.ytController.videoStateStream,
       initialData: const YoutubeVideoState(),
-      builder: (context, snapshot) {
-        final position = snapshot.data?.position.inSeconds ?? 0;
-        final duration = context.ytController.metadata.duration.inSeconds;
+      builder:
+          (BuildContext context, AsyncSnapshot<YoutubeVideoState> snapshot) {
+        final int position = snapshot.data?.position.inSeconds ?? 0;
+        final int duration = context.ytController.metadata.duration.inSeconds;
 
         value = position == 0 || duration == 0 ? 0 : position / duration;
 
         return StatefulBuilder(
-          builder: (context, setState) {
-            return Row(
-              children: [
-                Expanded(
-                  child: Slider(
-                    value: value,
-                    onChanged: (positionFraction) {
-                      value = positionFraction;
-                      setState(() {});
+          builder: (BuildContext context, setState) => Row(
+            children: <Widget>[
+              Expanded(
+                child: Slider(
+                  value: value,
+                  onChanged: (double positionFraction) {
+                    value = positionFraction;
+                    setState(() {});
 
-                      context.ytController.seekTo(
-                        seconds: (value * duration).toDouble(),
-                        allowSeekAhead: true,
-                      );
-                    },
-                    min: 0,
-                    max: 1,
-                  ),
+                    context.ytController.seekTo(
+                      seconds: value * duration,
+                      allowSeekAhead: true,
+                    );
+                  },
                 ),
-                Text(position.formattedTime),
-                const Text(' / '),
-                Text(duration.formattedTime)
-              ],
-            );
-          },
+              ),
+              Text(position.formattedTime),
+              const Text(" / "),
+              Text(duration.formattedTime),
+            ],
+          ),
         );
       },
     );

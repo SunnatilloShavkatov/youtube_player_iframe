@@ -1,4 +1,4 @@
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
 /// The skeleton for video information getters.
 abstract class VideoInformation {
@@ -43,6 +43,16 @@ class VideoData {
     required this.videoQualityFeatures,
   });
 
+  /// Creates [VideoData] from the [map].
+  factory VideoData.fromMap(Map<String, dynamic> map) => VideoData(
+        videoId: map["video_id"] ?? "",
+        author: map["author"] ?? "",
+        title: map["title"] ?? "",
+        videoQuality: map["videoQuality"] ?? "",
+        videoQualityFeatures:
+            List.from(map["videoQualityFeatures"] ?? <Object>[]),
+      );
+
   /// The YouTube video id for the video.
   final String videoId;
 
@@ -57,15 +67,4 @@ class VideoData {
 
   /// The video quality features.
   final List<Object> videoQualityFeatures;
-
-  /// Creates [VideoData] from the [map].
-  factory VideoData.fromMap(Map<String, dynamic> map) {
-    return VideoData(
-      videoId: map['video_id'] ?? '',
-      author: map['author'] ?? '',
-      title: map['title'] ?? '',
-      videoQuality: map['videoQuality'] ?? '',
-      videoQualityFeatures: List.from(map['videoQualityFeatures'] ?? []),
-    );
-  }
 }

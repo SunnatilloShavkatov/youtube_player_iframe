@@ -1,4 +1,4 @@
-import 'package:youtube_player_iframe/src/enums/player_state.dart';
+import "package:youtube_player_iframe/src/enums/player_state.dart";
 
 /// The skeleton for playback status methods.
 abstract class PlaybackStatus {

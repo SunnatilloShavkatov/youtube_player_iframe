@@ -7,7 +7,7 @@
 /// Find more about it [here](https://developers.google.com/youtube/iframe_api_reference#getPlaybackRate).
 class PlaybackRate {
   /// Sets playback rate to 2.0 times.
-  static const double twice = 2.0;
+  static const double twice = 2;
 
   /// Sets playback rate to 1.75 times.
   static const double oneAndAThreeQuarter = 1.75;
@@ -19,7 +19,7 @@ class PlaybackRate {
   static const double oneAndAQuarter = 1.25;
 
   /// Sets playback rate to 1.0 times.
-  static const double normal = 1.0;
+  static const double normal = 1;
 
   /// Sets playback rate to 0.75 times.
   static const double threeQuarter = 0.75;
@@ -31,7 +31,7 @@ class PlaybackRate {
   static const double quarter = 0.25;
 
   /// All
-  static const List<double> all = [
+  static const List<double> all = <double>[
     twice,
     oneAndAThreeQuarter,
     oneAndAHalf,

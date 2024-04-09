@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:youtube_player_iframe/src/widgets/fullscreen_youtube_player.dart';
+// ignore_for_file: discarded_futures
 
-import '../controller/youtube_player_controller.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
+import "package:webview_flutter/webview_flutter.dart";
+import "package:youtube_player_iframe/src/controller/youtube_player_controller.dart";
+import "package:youtube_player_iframe/src/widgets/fullscreen_youtube_player.dart";
 
 /// A widget to play or stream Youtube Videos.
 ///
@@ -24,7 +25,7 @@ class YoutubePlayer extends StatefulWidget {
     this.aspectRatio = 16 / 9,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.backgroundColor,
-    @Deprecated('Unused parameter. Use `YoutubePlayerParam.userAgent` instead.')
+    @Deprecated("Unused parameter. Use `YoutubePlayerParam.userAgent` instead.")
     this.userAgent,
     this.enableFullScreenOnVerticalDrag = true,
   });
@@ -48,7 +49,6 @@ class YoutubePlayer extends StatefulWidget {
   /// This is ignored on web.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  /// The background color of the [WebView].
   ///
   /// Default to [ColorScheme.background].
   final Color? backgroundColor;
@@ -71,12 +71,12 @@ class YoutubePlayer extends StatefulWidget {
 
 class _YoutubePlayerState extends State<YoutubePlayer> {
   late final YoutubePlayerController _controller;
+  late double aspectRatio = widget.aspectRatio;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller;
-
     _initPlayer();
   }
 
@@ -104,19 +104,17 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
     }
 
     return OrientationBuilder(
-      builder: (context, orientation) {
-        return AspectRatio(
+      builder: (BuildContext context, Orientation orientation) => AspectRatio(
           aspectRatio: orientation == Orientation.landscape
               ? MediaQuery.sizeOf(context).aspectRatio
-              : widget.aspectRatio,
+              : aspectRatio,
           child: player,
-        );
-      },
+        ),
     );
   }
 
   void _fullscreenGesture(DragUpdateDetails details) {
-    final delta = details.delta.dy;
+    final double delta = details.delta.dy;
 
     if (delta.abs() > 10) {
       delta.isNegative
@@ -126,15 +124,19 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   void _updateBackgroundColor(Color? backgroundColor) {
-    final bgColor = backgroundColor ?? Theme.of(context).colorScheme.background;
+    final Color bgColor = backgroundColor ?? Theme.of(context).colorScheme.background;
     _controller.webViewController.setBackgroundColor(bgColor);
   }
 
   Future<void> _initPlayer() async {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _updateBackgroundColor(widget.backgroundColor);
-    });
-
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        _updateBackgroundColor(widget.backgroundColor);
+      },
+    );
     await _controller.init();
+
+    aspectRatio = _controller.isYoutubeShorts ? 9 / 16 : widget.aspectRatio;
+    setState(() {});
   }
 }

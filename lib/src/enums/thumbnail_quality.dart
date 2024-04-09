@@ -5,17 +5,17 @@
 /// Quality of YouTube video thumbnail.
 class ThumbnailQuality {
   /// 120*90
-  static const String defaultQuality = 'default';
+  static const String defaultQuality = "default";
 
   /// 320*180
-  static const String medium = 'mqdefault';
+  static const String medium = "mqdefault";
 
   /// 480*360
-  static const String high = 'hqdefault';
+  static const String high = "hqdefault";
 
   /// 640*480
-  static const String standard = 'sddefault';
+  static const String standard = "sddefault";
 
   /// Unscaled thumbnail
-  static const String max = 'maxresdefault';
+  static const String max = "maxresdefault";
 }
