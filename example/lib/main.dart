@@ -32,8 +32,7 @@ class YoutubeApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: YoutubePage(
-          message:
-              "https://www.youtube.com/watch?v=Txv87B-ZmJM&ab_channel=iTV-kino%2CseriallarvaTV",
+          message: "https://youtu.be/2GnkIsGVDfI?si=UwLJVb2QfbQfBJyw",
           top: MediaQuery.viewPaddingOf(context).top,
         ),
       );
