@@ -402,9 +402,9 @@ class YoutubePlayerController implements YoutubePlayerIFrameAPI {
 
     for (final String regex in <String>[
       "${contentUrlPattern}v=$idPattern",
-      '$embedUrlPattern$idPattern',
-      '$altUrlPattern$idPattern',
-      '$shortsUrlPattern$idPattern',
+      "$embedUrlPattern$idPattern",
+      "$altUrlPattern$idPattern",
+      "$shortsUrlPattern$idPattern",
       "$musicUrlPattern?v=$idPattern",
     ]) {
       final Match? match = RegExp(regex).firstMatch(url);

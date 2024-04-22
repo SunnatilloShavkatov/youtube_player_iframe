@@ -6,11 +6,10 @@
 
 import "dart:developer";
 
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
-import 'package:youtube_player_iframe_example/youtube_page.dart';
+import "package:youtube_player_iframe_example/youtube_page.dart";
 
 Future<void> main() async {
   runApp(const YoutubeApp());
@@ -139,23 +138,10 @@ class VideoPlaylistIconButton extends StatefulWidget {
 
 class _VideoPlaylistIconButtonState extends State<VideoPlaylistIconButton> {
   @override
-  Widget build(BuildContext context) {
-    final YoutubePlayerController controller = context.ytController;
-
-    return IconButton(
-      onPressed: () async {
-        // controller.pauseVideo();
-        // await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => const VideoListPage(),
-        //   ),
-        // );
-        // controller.playVideo();
-      },
-      icon: const Icon(Icons.playlist_play_sharp),
-    );
-  }
+  Widget build(BuildContext context) => IconButton(
+        onPressed: () async {},
+        icon: const Icon(Icons.playlist_play_sharp),
+      );
 }
 
 ///

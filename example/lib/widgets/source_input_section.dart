@@ -115,7 +115,7 @@ class _SourceInputSectionState extends State<SourceInputSection> {
         return '"PLj0L3ZL0ijTdhFSueRKK-mLFAtDuvzdje", ...';
       case ListType.userUploads:
         return '"pewdiepie", "tseries"';
-      default:
+      case null:
         return null;
     }
   }
@@ -126,8 +126,8 @@ class _SourceInputSectionState extends State<SourceInputSection> {
         return "Enter playlist id";
       case ListType.userUploads:
         return "Enter channel name";
-      default:
-        return "Enter youtube <video id> or <link>";
+      case null:
+        return "Enter video id";
     }
   }
 
@@ -188,7 +188,7 @@ class _PlaylistTypeDropDownState extends State<_PlaylistTypeDropDown> {
         isExpanded: true,
         value: _playlistType,
         items: <DropdownMenuItem<ListType>>[
-          DropdownMenuItem(
+          DropdownMenuItem<ListType>(
             child: Text(
               "Select playlist type",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -198,8 +198,10 @@ class _PlaylistTypeDropDownState extends State<_PlaylistTypeDropDown> {
             ),
           ),
           ...ListType.values.map(
-            (ListType type) =>
-                DropdownMenuItem(value: type, child: Text(type.value)),
+            (ListType type) => DropdownMenuItem<ListType>(
+              value: type,
+              child: Text(type.value),
+            ),
           ),
         ],
         onChanged: (ListType? value) {

@@ -2,3 +2,9 @@
 pubspec.lock
 /.idea
 /.dart_tool
+/build
+.flutter-plugins
+.flutter-plugins-dependencies
+.DS_Store
+lib/.DS_Store
+lib/src/.DS_Store

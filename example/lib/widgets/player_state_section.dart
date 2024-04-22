@@ -11,7 +11,8 @@ class PlayerStateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => YoutubeValueBuilder(
-      builder: (BuildContext context, YoutubePlayerValue value) => AnimatedContainer(
+        builder: (BuildContext context, YoutubePlayerValue value) =>
+            AnimatedContainer(
           duration: const Duration(milliseconds: 800),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -28,7 +29,7 @@ class PlayerStateSection extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-    );
+      );
 
   Color _getStateColor(PlayerState state) {
     switch (state) {
@@ -46,8 +47,6 @@ class PlayerStateSection extends StatelessWidget {
         return Colors.yellow;
       case PlayerState.cued:
         return Colors.blue[900]!;
-      default:
-        return Colors.blue;
     }
   }
 }

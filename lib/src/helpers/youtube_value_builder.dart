@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// ignore_for_file: discarded_futures
+// ignore_for_file: discarded_futures, inference_failure_on_untyped_parameter
 
 import "dart:async";
 import "dart:developer";

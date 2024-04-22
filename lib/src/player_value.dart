@@ -41,7 +41,7 @@ class YoutubePlayerValue {
   final YoutubeMetaData metaData;
 
   @override
-  String toString() => "$runtimeType("
+  String toString() => "YoutubePlayerValue("
       "metaData: $metaData, "
       "playerState: $playerState, "
       "playbackRate: $playbackRate, "

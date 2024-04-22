@@ -4,3 +4,10 @@ pubspec.lock
 /.dart_tool
 /example/
 /example
+/build
+.flutter-plugins
+.flutter-plugins-dependencies
+
+.DS_Store
+lib/.DS_Store
+lib/src/.DS_Store

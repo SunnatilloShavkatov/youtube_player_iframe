@@ -1,3 +1,5 @@
+// ignore_for_file: discarded_futures
+
 import "package:flutter/material.dart";
 import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
@@ -23,7 +25,7 @@ class _VideoListPageState extends State<VideoListPage> {
   void initState() {
     super.initState();
 
-    _controllers = List.generate(
+    _controllers = List<YoutubePlayerController>.generate(
       _videoIds.length,
       (int index) => YoutubePlayerController.fromVideoId(
         videoId: _videoIds[index],
@@ -83,7 +85,6 @@ class _VideoListPageState extends State<VideoListPage> {
     for (final YoutubePlayerController controller in _controllers) {
       controller.close();
     }
-
     super.dispose();
   }
 }
