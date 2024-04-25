@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.18.1
   youtube_player_iframe:
     path: ../
 
