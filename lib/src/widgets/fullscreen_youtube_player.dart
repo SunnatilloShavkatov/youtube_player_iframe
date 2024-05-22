@@ -48,7 +48,7 @@ class FullscreenYoutubePlayer extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   ///
-  /// Default to [ColorScheme.background].
+  /// Default to [ColorScheme.surface].
   final Color? backgroundColor;
 
   @override
@@ -139,7 +139,8 @@ class _FullscreenYoutubePlayerState extends State<FullscreenYoutubePlayer> {
 
   void _resetOrientation() {
     SystemChrome.setPreferredOrientations(
-        <DeviceOrientation>[DeviceOrientation.portraitUp],);
+      <DeviceOrientation>[DeviceOrientation.portraitUp],
+    );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

@@ -52,7 +52,7 @@ class YoutubePlayer extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   ///
-  /// Default to [ColorScheme.background].
+  /// Default to [ColorScheme.surface].
   final Color? backgroundColor;
 
   /// Enables switching full screen mode on vertical drag in the player.
@@ -120,7 +120,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
 
   void _updateBackgroundColor(Color? backgroundColor) {
     final Color bgColor =
-        backgroundColor ?? Theme.of(context).colorScheme.background;
+        backgroundColor ?? Theme.of(context).colorScheme.surface;
     _controller.webViewController.setBackgroundColor(bgColor);
   }
 

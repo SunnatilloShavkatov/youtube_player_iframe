@@ -5,8 +5,8 @@ repository: https://github.com/SunnatilloShavkatov/youtube_player_iframe
 homepage: https://github.com/SunnatilloShavkatov/youtube_player_iframe/tree/englify
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
@@ -15,10 +15,10 @@ dependencies:
   url_launcher: ^6.2.6
   webview_flutter: ^4.7.0
   webview_flutter_android: ^3.16.1
-  webview_flutter_wkwebview: ^3.13.0
+  webview_flutter_wkwebview: ^3.13.1
 
 dev_dependencies:
-  flutter_lints: ^3.0.2
+  flutter_lints: ^4.0.0
 
 flutter:
 
