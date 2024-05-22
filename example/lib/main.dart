@@ -4,8 +4,6 @@
 
 // ignore_for_file: discarded_futures
 
-import "dart:developer";
-
 import "package:flutter/material.dart";
 import "package:youtube_player_iframe/youtube_player_iframe.dart";
 
@@ -31,104 +29,21 @@ class YoutubeApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: YoutubePage(
-          message: "https://youtu.be/2GnkIsGVDfI?si=UwLJVb2QfbQfBJyw",
+          message:
+              "https://www.youtube.com/watch?v=EMDhqk8VHlE&list=RDEMDhqk8VHlE&start_radio=1&ab_channel=Uzbekistan%27sclub",
           top: MediaQuery.viewPaddingOf(context).top,
         ),
       );
 }
 
-///
-class YoutubeAppDemo extends StatefulWidget {
-  const YoutubeAppDemo({super.key});
-
-  @override
-  State<YoutubeAppDemo> createState() => _YoutubeAppDemoState();
-}
-
-class _YoutubeAppDemoState extends State<YoutubeAppDemo> {
-  late YoutubePlayerController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-        showControls: false,
-        showFullscreenButton: true,
-        showVideoAnnotations: false,
-        loop: true,
-      ),
-    );
-
-    _controller
-      ..setFullScreenListener(
-        (bool isFullScreen) {
-          log('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
-        },
-      )
-      ..loadVideo(
-        "https://youtube.com/shorts/2GnkIsGVDfI?si=WlAnwymyr-L6_nDa",
-      );
-  }
-
-  @override
-  Widget build(BuildContext context) => YoutubePlayerScaffold(
-        controller: _controller,
-        builder: (BuildContext context, Widget player) => YoutubeValueBuilder(
-          builder: (_, YoutubePlayerValue value) => Scaffold(
-            body: SafeArea(
-              child: Stack(
-                children: <Widget>[
-                  Align(child: player),
-                  AnimatedPositioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    duration: const Duration(milliseconds: 300),
-                    child: AppBar(
-                      backgroundColor: Colors.transparent,
-                      surfaceTintColor: Colors.transparent,
-                      title: const Text("Youtube Player IFrame"),
-                    ),
-                  ),
-                  // Positioned(
-                  //   bottom: 1,
-                  //   left: 0,
-                  //   right: 0,
-                  //   child: const VideoPositionIndicator(),
-                  // ),
-                  const Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Controls(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
-  }
-}
-
-///
 class Controls extends StatelessWidget {
-  ///
   const Controls({super.key});
 
   @override
   Widget build(BuildContext context) => const VideoPositionSeeker();
 }
 
-///
 class VideoPlaylistIconButton extends StatefulWidget {
-  ///
   const VideoPlaylistIconButton({super.key});
 
   @override
@@ -144,7 +59,6 @@ class _VideoPlaylistIconButtonState extends State<VideoPlaylistIconButton> {
       );
 }
 
-///
 class VideoPositionIndicator extends StatelessWidget {
   const VideoPositionIndicator({super.key});
 
